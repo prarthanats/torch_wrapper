@@ -1,5 +1,6 @@
-# Assignment_10_Resnet_Utils
-Code to help with Data loading, Augmentation, Training of CIFAR10 Dataset
+# Torch Wrapper Utils for EVA Course
+
+Code to help with Data loading, Augmentation, Training and Visulaization
 
 ## Folder Structure
 
@@ -7,62 +8,83 @@ Code to help with Data loading, Augmentation, Training of CIFAR10 Dataset
     Assignment_10_Resnet_Utils
     |──config
     |── ── assignment_10.yaml
-    |── data_loader
-    |── ── data_augmentation.py
-    |── ── data_loader.py
-    |── utils
-    |── ── helper.py
-    |──── learning_rate_finder.py
-    |── ── visulatization.py
+    |── ── assignment_11.yaml
     |── model
     |── ── custom_resnet.py
+    |── ── resnet.py
+    |── utils
+    |── ── data_augmentation.py
+    |── ── data_handeling.py
+    |── ── data_loader.py
+    |── ── gradcam.py
+    |── ── helper.py
     |── ── train_test.py
+    |── ── visulaization.py
+    |── main.py
     |── README.md
 
 ~~~
 
-## Config File
-Includes the configurations for augmentations, training and learning rates.
+## [Config File](https://github.com/prarthanats/torch_wrapper/blob/main/config)
+Includes the configurations for various assignments, which follows the following structure
+~~~
+    1. Model and Model parameters
+    2. Data Augmentation
+    3. Data Loader Configurations
+    4. Criterion, Optimizer
+    5. Learning Rate Scheduler
+    6. Training Parameters
+~~~
 
-### [data_loader](https://github.com/prarthanats/Assignment_10_Resnet_Utils/tree/main/dataload)
+## Model
 
-Data Loader function downloads,calculate dataset statistics and transform the data and performs data augmentation using albumentations to create test and train loaders. The various augmentations we have done are  [Augmentation](https://github.com/prarthanats/Assignment_10_Resnet_Utils/blob/main/dataload/data_augmentation.py)
-1. Normalize: Normalizes the image by subtracting the mean and dividing by the standard deviation.
-2. PadIfNeeded: Pads the image if its height or width is smaller than the specified minimum height or width.
-3. RandomCrop: Randomly crops the image to the specified height and width.
-4. HorizontalFlip: Flips the image horizontally.
-5. Cutout: Applies random cutout augmentation by removing rectangular regions of the image.
-6. ToTensorV2: Converts the image to a PyTorch tensor.
+#### [Models for Assignments](https://github.com/prarthanats/torch_wrapper/tree/main/model)
+
+Includes the model files for various assignments
 
 ## Utils
+Includes the utility files for various assignments such as 
 
-#### [Helper Class](https://github.com/prarthanats/Assignment_10_Resnet_Utils/blob/main/utils/helper.py)
-It contains some of the miscellaneous functions to:
-1. Check for presence of GPU in runtime and create a device accordingly
-2. Loading configuration variables from yaml file as a dictionary
-3. Reading the model summary
+#### [Augmentation](https://github.com/prarthanats/torch_wrapper/blob/main/utils/data_augmentation.py)
 
-#### [Learning Rate Finder](https://github.com/prarthanats/Assignment_10_Resnet_Utils/blob/main/utils/learning_rate_finder.py)
-Learning Rate Finder uses the torch_lr_finder library to identify the maximum learning rate for the training data
+The data augmentation library used for CIFAR data is albumentations package 
 
-#### [Visulatization](https://github.com/prarthanats/Assignment_10_Resnet_Utils/blob/main/utils/visulatization.py)
+#### [Data Handling](https://github.com/prarthanats/torch_wrapper/blob/main/utils/data_handeling.py)
+
+The Handling of data for dataset, dataloaders and dataset_statistics
+
+#### [Data Loader](https://github.com/prarthanats/torch_wrapper/blob/main/utils/data_loader.py)
+
+Data Loader function downloads, created data arguments using the configuration from config file
+
+#### [Grad Cam](https://github.com/prarthanats/torch_wrapper/blob/main/utils/gradcam.py)
+
+Gradcam output for explaining the model output. Referenced the code from [Grad Cam Library](https://github.com/kazuto1011/grad-cam-pytorch/blob/fd10ff7fc85ae064938531235a5dd3889ca46fed/grad_cam.py)
+
+#### [Helper](https://github.com/prarthanats/torch_wrapper/blob/main/utils/helper.py)
+
+Helper function includes dunctionality for set seed functionality and process_config functionality to process the configuration file
+
+#### [Train and Test](https://github.com/prarthanats/torch_wrapper/blob/main/utils/train_test.py)
+
+Training and testing codes to input optimizers, schedulers and loss criteria.
+
+#### [Visulatization](https://github.com/prarthanats/torch_wrapper/blob/main/utils/visulaization.py)
 It contains some of visulation functions for:
 1. Plotting misclassified images with labels alongside images
 2. Plotting loss and accuracy metrics post training
 3. Plotting Class Specific images
 
-## Model
 
-#### [Custom Resnet](https://github.com/prarthanats/Assignment_10_Resnet_Utils/blob/main/model/custom_resnet.py)
+## [Main File](https://github.com/prarthanats/torch_wrapper/blob/main/main.py)
 
-The Custom Resnet model consists of several components:
-
-PrepBlock: The PrepBlock is responsible for processing the initial input data. In the given code, it consists of a series of operations applied to the input image. It applies a 3x3 convolutional layer with 3 input channels (RGB image) and 64 output channels, followed by a ReLU activation function, batch normalization, and dropout.
-
-ConvolutionBlock: The ConvBlock represents a convolutional block that consists of one or more convolutional layers followed by pooling, batch normalization, and activation functions. In the given code, the ConvBlock includes a 3x3 convolutional layer with a specified number of input and output channels, followed by a 2x2 max pooling layer, batch normalization, and ReLU activation function. This block is used to extract features from the input data.
-
-ResidualBlock: The ResidualBlock implements a residual block, which is commonly used in deep neural networks to enable better gradient flow during training. It consists of two 3x3 convolutional layers with the same number of input and output channels, followed by batch normalization and ReLU activation functions. The output of the block is obtained by adding the input to the result of the second convolutional layer, which creates a residual connection. This allows the network to learn residual mappings, helping with the optimization process and improving the network's performance.
-
-#### [Train and Test](https://github.com/prarthanats/Assignment_10_Resnet_Utils/blob/main/model/train_test.py)
-
-Training and testing codes to input optimizers, schedulers and loss criteria.
+Main file includes the TriggerTraining Class that includes call
+~~~
+    1. Data loader
+    2. Set the device
+    3. Model Summary
+    4. Learning Rate finder
+    5. Run Training
+    6. Get wrong predictions
+    7. Plot the misclassified
+~~~
