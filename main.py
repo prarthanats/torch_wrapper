@@ -55,7 +55,7 @@ class TriggerTraining:
         lr_finder.reset()  
         return max_LR
 
-    def run_experiment(self,model,train_loader,test_loader,lrmax):
+    def run_training(self,model,train_loader,test_loader,lrmax):
         train_losses = []
         test_losses = []
         train_accuracy = []
