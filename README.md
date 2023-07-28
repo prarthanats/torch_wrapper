@@ -36,9 +36,7 @@ Includes the configurations for various assignments, which follows the following
     6. Training Parameters
 ~~~
 
-## Model
-
-#### [Models for Assignments](https://github.com/prarthanats/torch_wrapper/tree/main/model)
+## [Models for Assignments](https://github.com/prarthanats/torch_wrapper/tree/main/model)
 
 Includes the model files for various assignments
 
